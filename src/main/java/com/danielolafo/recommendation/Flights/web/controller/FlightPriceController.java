@@ -20,6 +20,11 @@ import com.danielolafo.recommendation.Flights.application.service.FlightPriceSer
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * 
+ * 
+ * @author Daniel Orlando López Ochoa
+ */
 @RestController
 @RequestMapping("/api/v1/flight-prices")
 public class FlightPriceController {
