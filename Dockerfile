@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY pom.xml pom.xml
 
-RUN ["mvn","clean","install"]
+RUN mvn clean package
 
 #RUN mvn clean install
 COPY target/*.jar /app/app.jar
