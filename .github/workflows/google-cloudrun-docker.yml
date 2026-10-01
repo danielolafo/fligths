@@ -38,7 +38,7 @@ env:
   PROJECT_ID: 'flights-510313' # TODO: update to your Google Cloud project ID
   REGION: 'us-central1' # TODO: update to your region
   SERVICE: 'flights' # TODO: update to your service name
-  WORKLOAD_IDENTITY_PROVIDER: 'https://iam.googleapis.com/projects/1045218676535/locations/global/workloadIdentityPools/wif-flights/providers/github' # TODO: update to your workload identity provider
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/1045218676535/locations/global/workloadIdentityPools/wif-flights/providers/github' # TODO: update to your workload identity provider
   IMAGE: flights-app
 
 jobs:
