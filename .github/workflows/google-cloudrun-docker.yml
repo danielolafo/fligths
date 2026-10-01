@@ -74,6 +74,17 @@ jobs:
           password: '${{ steps.auth.outputs.auth_token }}'
           registry: '${{ env.REGION }}-docker.pkg.dev'
 
+      - name: 'DEBUG identity'
+        if: ${{ always() }}
+        run: |-
+          echo "== claims del token con el que se hace login =="
+          echo '${{ steps.auth.outputs.auth_token }}' | cut -d. -f2 | tr '_-' '/+' | base64 -d 2>/dev/null \
+            | jq '{sub: .sub, email: .email, azp: .azp, scope: .scope}'
+          echo "== repositorio de destino =="
+          gcloud config set project flights-510313
+          gcloud artifacts repositories describe flights \
+            --project=flights-510313 --location=us-central1 --format='value(name)'
+
       - name: 'Build and Push Container'
         run: |-
           DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.IMAGE }}:${{ github.sha }}"
