@@ -7,6 +7,8 @@ WORKDIR /app
 
 COPY pom.xml pom.xml
 
+RUN mvn clean install
+
 #RUN mvn clean install
 COPY target/*.jar /app/app.jar
 # El jar se copia a /app/app.jar (WORKDIR es /app), no a /app.jar.
