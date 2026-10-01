@@ -32,6 +32,12 @@ public class AirlineController {
         return airlineService.findAll();
     }
 
+    /**
+     * <p>Get the airline info using the interantional code</p>
+     * @param airlineCode
+     * @return
+     * @author Daniel Orlando López Ochoa
+     */
     @GetMapping("/{airlineCode}")
     public Mono<AirlineDto> getById(@PathVariable String airlineCode) {
         return airlineService.findById(airlineCode);
