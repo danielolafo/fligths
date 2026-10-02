@@ -8,5 +8,6 @@ public record FlightPriceDto(
         String destination,
         String monthNum,
         Integer dayOfMonth,
-        BigDecimal price) {
+        BigDecimal price,
+        String airlineCode) {
 }

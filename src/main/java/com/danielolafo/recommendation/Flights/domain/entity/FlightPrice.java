@@ -33,17 +33,21 @@ public class FlightPrice implements Persistable<Integer> {
     @Column("price")
     private BigDecimal price;
 
+    @Column("airline_code")
+    private String airlineCode;
+
     public FlightPrice() {
     }
 
     public FlightPrice(Integer id, String origin, String destination, String monthNum, Integer dayOfMonth,
-                       BigDecimal price) {
+                       BigDecimal price, String airlineCode) {
         this.id = id;
         this.origin = origin;
         this.destination = destination;
         this.monthNum = monthNum;
         this.dayOfMonth = dayOfMonth;
         this.price = price;
+        this.airlineCode = airlineCode;
         this.isNew = true;
     }
 
@@ -99,5 +103,13 @@ public class FlightPrice implements Persistable<Integer> {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getAirlineCode() {
+        return airlineCode;
+    }
+
+    public void setAirlineCode(String airlineCode) {
+        this.airlineCode = airlineCode;
     }
 }

@@ -64,5 +64,7 @@ CREATE TABLE flights_prices (
   destination VARCHAR(255),
   month_num VARCHAR(20),
   day_of_month INT,
-  price DECIMAL(10, 2)
+  price DECIMAL(10, 2),
+  airline_code VARCHAR(2), -- e.g., 'AF' -> airlines.airline_code
+  FOREIGN KEY (airline_code) REFERENCES airlines(airline_code)
 );

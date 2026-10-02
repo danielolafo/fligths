@@ -58,7 +58,7 @@ public class FlightPriceServiceImpl implements FlightPriceService {
         return flightPriceRepository.findByOriginAndDestination(origin, destination)
         		.sort((a,b)->a.getPrice().compareTo(b.getPrice()))
         		.elementAt(0)
-        		.map(fp -> new FlightPriceDto(fp.getId(), fp.getOrigin(), fp.getDestination(), fp.getMonthNum(), fp.getDayOfMonth(), fp.getPrice()))
+        		.map(fp -> new FlightPriceDto(fp.getId(), fp.getOrigin(), fp.getDestination(), fp.getMonthNum(), fp.getDayOfMonth(), fp.getPrice(), fp.getAirlineCode()))
                 .switchIfEmpty(Mono.error(
                         new ResourceNotFoundException("FlightPrice route", origin + " - " + destination)));
     }
@@ -66,7 +66,8 @@ public class FlightPriceServiceImpl implements FlightPriceService {
     @Override
     public Mono<FlightPriceDto> create(FlightPriceDto flightPriceDto) {
         FlightPrice price = new FlightPrice(null, flightPriceDto.origin(), flightPriceDto.destination(),
-                flightPriceDto.monthNum(), flightPriceDto.dayOfMonth(), flightPriceDto.price());
+                flightPriceDto.monthNum(), flightPriceDto.dayOfMonth(), flightPriceDto.price(),
+                flightPriceDto.airlineCode());
         return flightPriceRepository.save(price).map(this::toDto);
     }
 
@@ -79,6 +80,7 @@ public class FlightPriceServiceImpl implements FlightPriceService {
                     price.setMonthNum(flightPriceDto.monthNum());
                     price.setDayOfMonth(flightPriceDto.dayOfMonth());
                     price.setPrice(flightPriceDto.price());
+                    price.setAirlineCode(flightPriceDto.airlineCode());
                     return flightPriceRepository.save(price);
                 })
                 .map(this::toDto);
@@ -96,6 +98,6 @@ public class FlightPriceServiceImpl implements FlightPriceService {
 
     private FlightPriceDto toDto(FlightPrice price) {
         return new FlightPriceDto(price.getId(), price.getOrigin(), price.getDestination(),
-                price.getMonthNum(), price.getDayOfMonth(), price.getPrice());
+                price.getMonthNum(), price.getDayOfMonth(), price.getPrice(), price.getAirlineCode());
     }
 }
