@@ -100,7 +100,12 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          service_account: '${{ env.RUN_SERVICE_ACCOUNT }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          # NOTE: deploy-cloudrun has no `service_account` input; the runtime
+          # identity must be passed as a gcloud flag. Without it Cloud Run
+          # falls back to <PROJECT_NUMBER>-compute@developer.gserviceaccount.com
+          # and the deploy fails with an iam.serviceaccounts.actAs error.
+          flags: '--service-account=${{ env.RUN_SERVICE_ACCOUNT }}'
           # NOTE: If using a pre-built image, update the image name below:
 
           image: '${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.IMAGE }}:${{ github.sha }}'
