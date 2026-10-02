@@ -56,7 +56,7 @@ public class FlightPriceController {
      * @author Daniel Orlando López Ochoa
      */
     @GetMapping("/best-price")
-    public Mono<BigDecimal> getBestPrice(@RequestParam String origin,
+    public Mono<FlightPriceDto> getBestPrice(@RequestParam String origin,
                                          @RequestParam String destination) {
         return flightPriceService.findBestPrice(origin, destination);
     }

@@ -1,7 +1,5 @@
 package com.danielolafo.recommendation.Flights.application.service;
 
-import java.math.BigDecimal;
-
 import com.danielolafo.recommendation.Flights.application.dto.FlightPriceDto;
 
 import reactor.core.publisher.Flux;
@@ -17,7 +15,7 @@ public interface FlightPriceService {
 
     Flux<FlightPriceDto> findByRouteAndMonth(String origin, String destination, String monthNum);
 
-    Mono<BigDecimal> findBestPrice(String origin, String destination);
+    Mono<FlightPriceDto> findBestPrice(String origin, String destination);
 
     Mono<FlightPriceDto> create(FlightPriceDto flightPriceDto);
 

@@ -54,10 +54,11 @@ public class FlightPriceServiceImpl implements FlightPriceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<BigDecimal> findBestPrice(String origin, String destination) {
+    public Mono<FlightPriceDto> findBestPrice(String origin, String destination) {
         return flightPriceRepository.findByOriginAndDestination(origin, destination)
-                .map(FlightPrice::getPrice)
-                .reduce(BigDecimal::min)
+        		.sort((a,b)->a.getPrice().compareTo(b.getPrice()))
+        		.elementAt(0)
+        		.map(fp -> new FlightPriceDto(fp.getId(), fp.getOrigin(), fp.getDestination(), fp.getMonthNum(), fp.getDayOfMonth(), fp.getPrice()))
                 .switchIfEmpty(Mono.error(
                         new ResourceNotFoundException("FlightPrice route", origin + " - " + destination)));
     }
