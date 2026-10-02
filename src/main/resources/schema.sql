@@ -14,8 +14,17 @@ CREATE TABLE airlines (
     country_of_origin VARCHAR(100)
 );
 
--- 3. FLIGHT SCHEDULES (The Blueprint)
-CREATE TABLE flight_schedules (
+CREATE TABLE planes (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	model_id INTEGER NOT NULL,
+	number_of_seats INTEGER NOT NULL,
+	status VARCHAR(2) NOT NULL,
+	airline_code VARCHAR(2),
+	FOREIGN KEY (airline_code) REFERENCES airlines(airline_code)
+);
+
+-- 3. FLIGHT SCHEDULES (The Blueprint) Also called bookings
+CREATE TABLE bookings (
     schedule_id INT PRIMARY KEY AUTO_INCREMENT,
     airline_code VARCHAR(2),
     flight_number VARCHAR(10) NOT NULL,
@@ -24,6 +33,7 @@ CREATE TABLE flight_schedules (
     scheduled_departure_time TIME NOT NULL,
     scheduled_arrival_time TIME NOT NULL,
     days_of_week VARCHAR(7), -- e.g., '1234567' for daily, '135' for Mon/Wed/Fri
+    number_of_reserved_seats INTEGER NOT NULL,
     FOREIGN KEY (airline_code) REFERENCES airlines(airline_code),
     FOREIGN KEY (departure_airport) REFERENCES airports(airport_code),
     FOREIGN KEY (arrival_airport) REFERENCES airports(airport_code)
@@ -38,7 +48,25 @@ CREATE TABLE flights (
     actual_departure_time TIMESTAMP,
     actual_arrival_time TIMESTAMP,
     status VARCHAR(20) DEFAULT 'Scheduled', -- Scheduled, Delayed, Cancelled
-    FOREIGN KEY (schedule_id) REFERENCES flight_schedules(schedule_id)
+    FOREIGN KEY (schedule_id) REFERENCES bookings(schedule_id)
+);
+
+CREATE TABLE flight_seat (
+	id INTEGER PRIMARY KEY,
+	flight_id INTEGER NOT NULL,
+	booking_id INTEGER NOT NULL
+);
+
+
+CREATE TABLE seats (
+	id INTEGER PRIMARY KEY,
+	plane_id INTEGER NOT NULL,
+	seat_number VARCHAR(20)
+);
+
+CREATE TABLE booking_seats (
+	id INTEGER PRIMARY KEY,
+	booking_id INTEGER NOT NULL
 );
 
 -- 5. PRICING, CABINS, AND OFFERS (The "Kayak" Deal Aggregator Part)

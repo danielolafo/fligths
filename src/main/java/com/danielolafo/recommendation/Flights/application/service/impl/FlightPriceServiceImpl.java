@@ -1,15 +1,15 @@
 package com.danielolafo.recommendation.Flights.application.service.impl;
 
-import java.math.BigDecimal;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.danielolafo.recommendation.Flights.application.dto.FlightPriceDto;
 import com.danielolafo.recommendation.Flights.application.service.FlightPriceService;
+import com.danielolafo.recommendation.Flights.application.usecase.PubSubService;
 import com.danielolafo.recommendation.Flights.domain.entity.FlightPrice;
 import com.danielolafo.recommendation.Flights.domain.exception.ResourceNotFoundException;
 import com.danielolafo.recommendation.Flights.infrastructure.repository.FlightPriceRepository;
+import com.danielolafo.recommendation.Flights.utils.TopicConstants;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,9 +19,13 @@ import reactor.core.publisher.Mono;
 public class FlightPriceServiceImpl implements FlightPriceService {
 
     private final FlightPriceRepository flightPriceRepository;
+    private final PubSubService pubSubService;
 
-    public FlightPriceServiceImpl(FlightPriceRepository flightPriceRepository) {
+    public FlightPriceServiceImpl(
+    		FlightPriceRepository flightPriceRepository,
+    		PubSubService pubSubService) {
         this.flightPriceRepository = flightPriceRepository;
+        this.pubSubService = pubSubService;
     }
 
     @Override
@@ -88,7 +92,9 @@ public class FlightPriceServiceImpl implements FlightPriceService {
 
     @Override
     public Mono<Void> delete(Integer id) {
-        return findEntity(id).flatMap(flightPriceRepository::delete);
+        return findEntity(id).flatMap(flightPriceRepository::delete)
+        		.doOnSuccess(s -> pubSubService.publishMessage(TopicConstants.T_BOOKING, id.toString()))
+        		.doOnError(s -> pubSubService.publishMessage(TopicConstants.T_BOOKING, id.toString()));
     }
 
     private Mono<FlightPrice> findEntity(Integer id) {
