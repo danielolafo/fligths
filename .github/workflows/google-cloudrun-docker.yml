@@ -105,7 +105,8 @@ jobs:
           # identity must be passed as a gcloud flag. Without it Cloud Run
           # falls back to <PROJECT_NUMBER>-compute@developer.gserviceaccount.com
           # and the deploy fails with an iam.serviceaccounts.actAs error.
-          flags: '--service-account=${{ env.RUN_SERVICE_ACCOUNT }}'
+          # --allow-unauthenticated exposes the service publicly (invoker: allUsers).
+          flags: '--service-account=${{ env.RUN_SERVICE_ACCOUNT }} --allow-unauthenticated'
           # NOTE: If using a pre-built image, update the image name below:
 
           image: '${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.IMAGE }}:${{ github.sha }}'
