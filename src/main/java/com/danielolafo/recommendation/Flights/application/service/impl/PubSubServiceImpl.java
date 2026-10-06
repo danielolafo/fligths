@@ -17,8 +17,13 @@ public class PubSubServiceImpl implements PubSubService {
 
 	@Override
     public void publishMessage(String topicName, String message) {
-        pubSubTemplate.publish(topicName, message);
-        log.info("Message published successfully to {}", topicName);
+        pubSubTemplate.publish(topicName, message).whenComplete((messageId, error) -> {
+            if (error != null) {
+                log.error("Failed to publish message to topic {}", topicName, error);
+            } else {
+                log.info("Message published to topic {} with id {}", topicName, messageId);
+            }
+        });
     }
 
 }
